@@ -12,11 +12,14 @@ class SPI {
 	private:
 		SPI_HandleTypeDef spi;
 		int CSpin;
+		uint16_t PIN_SELECTED;
+		uint16_t BANK_SELECTED;
 	public:
-		void SPI(SPI_HandleTypeDef spi, int CSpin); //Constructor
+		void SPI(SPI_HandleTypeDef spi, int CSpin, int BPin); //Constructor
 		void SPIWrite(uint8_t data);
-		uint8_t SPIread(uint8_t addr);
+		uint8_t SPIRead(uint8_t addr, );
 };
 
 
 #endif /* SRC_SPI_H_ */
+
