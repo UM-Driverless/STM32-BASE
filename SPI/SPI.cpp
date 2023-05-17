@@ -30,7 +30,7 @@ int Select_Bank_Pin(int PIN_B){
  * PIN_W --> Entrada de la función para seleccionar el pin
  * PIN_B --> Entrada para seleccionar el banco de pines
  */
-int Select_Write_Pin(int PIN_W, int PIN_B){
+int Select_Write_Pin(int PIN_W){
 	switch(PIN_W) {
 		case 1:
 			return GPIO_PIN_1;
