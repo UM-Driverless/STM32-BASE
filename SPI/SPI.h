@@ -2,26 +2,28 @@
  * SPI.h
  *
  *  Created on: Apr 29, 2023
- *      Author: Mi Equipo
+ *      Author: Pablo Antolín
  */
 
 #ifndef SRC_SPI_H_
 #define SRC_SPI_H_
 
+#include "stm32f1xx.h"
+
 class SPI {
 	private:
-		SPI_HandleTypeDef spi;
+		SPI_HandleTypeDef* spi;
 		int CSpin;
 		uint16_t PIN_SELECTED;
-		uint16_t BANK_SELECTED;
+		GPIO_TypeDef BANK_SELECTED;
 	protected:
-		int Select_Bank_Pin(int PIN_B);
-		int Select_Write_Pin(int PIN_W);
+		GPIO_TypeDef* Select_Bank_Pin(int PIN_B);
+		uint16_t Select_Write_Pin(int PIN_W);
 	public:
-		void SPI(); //Constructor vacio
-		void SPI(SPI_HandleTypeDef spi, int CSpin, int BPin); //Constructor
-		void SPIWrite(uint8_t data);
-		uint8_t SPIRead(uint8_t addr, );
+		SPI(); //Constructor vacio
+		SPI(SPI_HandleTypeDef* spi, int CSpin, int BPin); //Constructor
+		void SPIWrite(uint8_t data, GPIO_TypeDef* BANK_SELECTED);
+		uint8_t SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED);
 };
 
 

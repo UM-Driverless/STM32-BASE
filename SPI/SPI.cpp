@@ -13,7 +13,7 @@
 /*
  * PIN_B --> Entrada para seleccionar el banco de pines
  */
-int Select_Bank_Pin(int PIN_B){
+GPIO_TypeDef* Select_Bank_Pin(int PIN_B){
 	switch(PIN_B){
 			case 1:
 				return GPIOA;
@@ -22,7 +22,7 @@ int Select_Bank_Pin(int PIN_B){
 				return GPIOB;
 				break;
 			default:
-				return -1; //Manejar como excepción
+				return GPIOC; //Manejar como excepción
 	}
 }
 //Función para seleccionar el pin en el que tenemos que escribir
@@ -30,7 +30,7 @@ int Select_Bank_Pin(int PIN_B){
  * PIN_W --> Entrada de la función para seleccionar el pin
  * PIN_B --> Entrada para seleccionar el banco de pines
  */
-int Select_Write_Pin(int PIN_W){
+uint16_t Select_Write_Pin(int PIN_W){
 	switch(PIN_W) {
 		case 1:
 			return GPIO_PIN_1;
@@ -86,32 +86,34 @@ int Select_Write_Pin(int PIN_W){
  * CSpin --> Selector del periférico con el que nos queremos comunicar
  * BPin --> Selector del banco de pines
  */
-void SPI(SPI_HandleTypeDef spi, int CSpin, int BPin){
+SPI::SPI(SPI_HandleTypeDef* spi, int CSpin, int BPin){
 	this->spi = spi;
 	this->CSpin = CSpin;
 	HAL_SPI_Init(spi); //Inicializa periferico SPI
-	HAL_SPI_MspInit(spi); //Inicializa los pines GPIO y la configuración de interrupción
-	BANK_SELECTED = Select_Bank_Pin(BPin); //Llamamos a la función para seleccionar el banco del pin
-	PIN_SELECTED = Select_Write_Pin(CSPin); //Llamamos a la función para seleccionar el pin
+	HAL_SPI_MspInit(this->spi); //Inicializa los pines GPIO y la configuración de interrupción
+	GPIO_TypeDef* BANK_SELECTED = Select_Bank_Pin(BPin); //Llamamos a la función para seleccionar el banco del pin
+	uint16_t PIN_SELECTED = Select_Write_Pin(CSpin); //Llamamos a la función para seleccionar el pin
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_SET); //Pin en el que se va a escribir
 }
 //Implementación de la función SPIWrite
 /*
  * data --> Datos que mandamos
  */
-void SPIWrite(uint8_t data){
+void SPI::SPIWrite(uint8_t data, GPIO_TypeDef* BANK_SELECTED){
 	HAL_GPIO_WritePin(GPIOB, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
-	dataSize = sizeOf(data) / sizeOf(uint8_t);
+	size_t dataS = sizeof(data) / sizeof(uint8_t); //Calculamos el tamaño de los datos
+	uint8_t dataSize = static_cast<uint8_t>(dataS); //Convertimos el tipo size_t (dataS) al tipo uint8_t
 	HAL_SPI_Transmit(spi, data, dataSize, 100); //Transmitimos los datos
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_SET); //Vuelve a poner el pin a High
 }
 //Implementación de la función SPIRead
 /*
- * addr -->
+ * addr --> Dirección dónde se van a leer los datos
  */
-void SPIRead(unint8_t addr){ //TO DO(1)
+uint8_t SPI::SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED){ //TO DO(1)
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
+	HAL_SPI_Transmit(BANK_SELECTED, addr, dataSize, 100); //Transmite la dirección a leer (Repasar)
 	HAL_SPI_Receive(spi, data, dataSize, 100); //Recibimos los datos
-	HAL_GPIO_WritePin(BANK_SEÑECTED, PIN_SELECTED, GPIO_PIN_RESET); //Vuelve a poner el pin a High
-
+	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Vuelve a poner el pin a High
+	return data;
 }
