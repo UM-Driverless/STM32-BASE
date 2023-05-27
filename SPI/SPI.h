@@ -23,7 +23,7 @@ class SPI {
 		SPI(); //Constructor vacio
 		SPI(SPI_HandleTypeDef* spi, int CSpin, int BPin); //Constructor
 		void SPIWrite(uint8_t data, GPIO_TypeDef* BANK_SELECTED);
-		uint8_t SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED);
+		uint8_t* SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED, uint8_t dataSize);
 };
 
 

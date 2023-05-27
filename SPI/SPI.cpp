@@ -103,14 +103,15 @@ void SPI::SPIWrite(uint8_t data, GPIO_TypeDef* BANK_SELECTED){
 	HAL_GPIO_WritePin(GPIOB, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
 	size_t dataS = sizeof(data) / sizeof(uint8_t); //Calculamos el tamaño de los datos
 	uint8_t dataSize = static_cast<uint8_t>(dataS); //Convertimos el tipo size_t (dataS) al tipo uint8_t
-	HAL_SPI_Transmit(spi, data, dataSize, 100); //Transmitimos los datos
+	HAL_SPI_Transmit(spi, &data, dataSize, 100); //Transmitimos los datos
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_SET); //Vuelve a poner el pin a High
 }
 //Implementación de la función SPIRead
 /*
  * addr --> Dirección dónde se van a leer los datos
  */
-uint8_t SPI::SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED){ //TO DO(1)
+uint8_t* SPI::SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED, uint8_t dataSize){ //TO DO(1)
+	uint8_t* data;
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
 	HAL_SPI_Transmit(BANK_SELECTED, addr, dataSize, 100); //Transmite la dirección a leer (Repasar)
 	HAL_SPI_Receive(spi, data, dataSize, 100); //Recibimos los datos
