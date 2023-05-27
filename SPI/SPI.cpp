@@ -111,7 +111,7 @@ void SPIWrite(uint8_t data){
  */
 void SPIRead(unint8_t addr){ //TO DO(1)
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
-	HAL_SPI_Receive(spi, data, dataSize, 100); //Recivimos los datos
+	HAL_SPI_Receive(spi, data, dataSize, 100); //Recibimos los datos
 	HAL_GPIO_WritePin(BANK_SEÑECTED, PIN_SELECTED, GPIO_PIN_RESET); //Vuelve a poner el pin a High
 
 }
