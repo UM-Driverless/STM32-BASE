@@ -110,11 +110,15 @@ void SPI::SPIWrite(uint8_t data, GPIO_TypeDef* BANK_SELECTED){
 /*
  * addr --> Dirección dónde se van a leer los datos
  */
-uint8_t* SPI::SPIRead(uint8_t addr, GPIO_TypeDef* BANK_SELECTED, uint8_t dataSize){ //TO DO(1)
-	uint8_t* data;
+uint8_t* SPI::SPIRead(SPI_HandleTypeDef* spi, uint8_t addr, GPIO_TypeDef* BANK_SELECTED, uint8_t dataSize){
+	this->spi = spi;
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Pone el pin a Low
-	HAL_SPI_Transmit(BANK_SELECTED, addr, dataSize, 100); //Transmite la dirección a leer (Repasar)
+	HAL_SPI_Transmit(spi, &addr, dataSize, 100); //Transmite la dirección a leer (Repasar)
+	uint8_t* data = 0; //Declaramos la variable data (poner un valor imposible para manejar excepciones) TO DO(1)
 	HAL_SPI_Receive(spi, data, dataSize, 100); //Recibimos los datos
+	if (data == 0){
+		printf("No se ha recibido nada"); //Manejar excepcion (esto es un ejemplo
+	};
 	HAL_GPIO_WritePin(BANK_SELECTED, PIN_SELECTED, GPIO_PIN_RESET); //Vuelve a poner el pin a High
 	return data;
 }

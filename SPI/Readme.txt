@@ -1,6 +1,6 @@
 ||__TO DO__||
 
-- Revisar la variable dataSize
+- Poner un valor imposible para manejar excepciones
  ___________________
 ||__Documentacion__||
 - Vídeo e información SPI:  https://www.digikey.com/en/maker/projects/getting-started-with-stm32-how-to-use-spi/09eab3dfe74c4d0391aaaa99b0a8ee17
