@@ -11,13 +11,13 @@
 
 class PWM {
 private:
-	TIM_HandleTypeDef timer;
+	TIM_HandleTypeDef* timer;
 	uint16_t TIMchannel;
 	uint16_t duty_cycle;
 	uint16_t Arr;
 
 public:
-	PWM(TIM_HandleTypeDef timer, uint16_t TIMchannel);
+	PWM(TIM_HandleTypeDef* timer, uint16_t TIMchannel);
 	void setDutyCycle(uint16_t duty); //Duty cycle directo
 	uint16_t getDutyCycle();
 	void setDutyCycle_8bitScaled(uint8_t prct);
