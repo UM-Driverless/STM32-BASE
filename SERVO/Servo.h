@@ -19,11 +19,8 @@ private:
 
 public:
 	Servo(TIM_HandleTypeDef* timer, uint16_t TIMchannel);
-	uint8_t getServoPosition(uint8_t pos);
-	uint16_t getDutyCycle();
-	void setDutyCycle_8bitScaled(uint8_t prct);
+	uint8_t getServoPosition();
 	void setServoPosition(uint8_t pos);
-	uint8_t getDutyCycle_8bitScaled();
 
 
 	virtual ~Servo();
